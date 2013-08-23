@@ -1,0 +1,34 @@
+order-of-a-list-is-preserved
+  extensions [ rnd ]
+  O> set glob1 rnd:weighted-n-of 8 ["9a" "8b" "7c" "6d" "5e" "4f" "3g" "2h" "1i"] [ 1.0 ]
+  glob1 = sort-by [item 1 ?1 < item 1 ?2] glob1 => true
+  O> set glob1 rnd:weighted-n-of 50 n-values 100 [?] [ 1.0 ]
+  glob1 = sort glob1 => true
+
+same-list-returned-if-n-equals-size
+  extensions [ rnd ]
+  O> set glob1 ["a" "s" "d" "f" "g" "h" "j" "k" "l"]
+  glob1 = rnd:weighted-n-of length glob1  glob1 [ 1.0 ] => true
+
+same-agentset-returned-if-n-equals-size
+  extensions [ rnd ]
+  O> crt 10
+  turtles = rnd:weighted-n-of count turtles turtles [ 1.0 ] => true
+
+first-input-cannot-be-negative
+  extensions [ rnd ]
+  rnd:weighted-n-of -1 [] [ 1.0 ] => ERROR Extension exception: First input to WEIGHTED-N-OF can't be negative.
+  rnd:weighted-n-of -1 [1 2 3] [ 1.0 ] => ERROR Extension exception: First input to WEIGHTED-N-OF can't be negative.
+
+requesting-zero-items-from-list-gives-empty-list
+  extensions [ rnd ]
+  rnd:weighted-n-of 0 [] [ 1.0 ] => []
+  rnd:weighted-n-of 0 [1 2 3] [ 1.0 ] => []
+
+
+  #n-of 1 [] => ERROR Requested 1 random items from a list of length 0.
+  #n-of 1 [99] => [99]
+  #n-of 2 [1 2] => [1 2]
+  #sum n-values 20 [sum n-of 10 n-values 10 [?]] => 900
+  #sum n-values 20 [sum n-values 10 [length n-of ? n-values 10 [?]]] => 900
+  #length remove-duplicates n-values 1000 [n-of 1 n-values 10 [?]] => 10
