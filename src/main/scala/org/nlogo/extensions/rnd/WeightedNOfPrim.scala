@@ -21,7 +21,9 @@ import org.nlogo.util.MersenneTwisterFast
 object WeightedNOfPrim extends DefaultReporter {
   val name = "WEIGHTED-N-OF"
 
-  override def getSyntax = reporterSyntax(Array(NumberType, ListType | AgentsetType, ReporterTaskType), ListType | AgentsetType)
+  override def getSyntax = reporterSyntax(
+    Array(NumberType, ListType | AgentsetType, ReporterTaskType),
+    ListType | AgentsetType)
   def report(args: Array[Argument], context: Context): AnyRef = {
 
     val n: Int = getN(args(0))
