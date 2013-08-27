@@ -48,19 +48,19 @@ requesting-zero-items-from-empty-agentset-gives-empty-agentset
 
 requesting-n-from-empty-list-gives-error
   extensions [ rnd ]
-  rnd:weighted-n-of 1 [] [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
+  rnd:weighted-n-of 1 [] [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
 
 requesting-n-from-empty-agentset-gives-error
   extensions [ rnd ]
-  rnd:weighted-n-of 1 turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
+  rnd:weighted-n-of 1 turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
 
 requesting-one-from-empty-list-gives-error
   extensions [ rnd ]
-  rnd:weighted-one-of [] [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
+  rnd:weighted-one-of [] [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
 
 requesting-one-from-empty-agentset-gives-error
   extensions [ rnd ]
-  rnd:weighted-one-of turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
+  rnd:weighted-one-of turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
 
 requesting-more-items-than-in-list-gives-error
   extensions [ rnd ]
@@ -73,7 +73,7 @@ requesting-more-items-than-in-agentset-gives-error
 
 requesting-one-of-list-with-all-zeros-gives-error
   extensions [ rnd ]
-  rnd:weighted-one-of [0 0 0] [ ? ] => ERROR Extension exception: Requested 1 random items from 0 candidates with weight > 0.0.
+  rnd:weighted-one-of [0 0 0] [ ? ] => ERROR Extension exception: Requested 1 random item from 0 candidates with weight > 0.0.
 
 requesting-more-items-than-items-with-positive-weights-in-list-gives-error
   extensions [ rnd ]
