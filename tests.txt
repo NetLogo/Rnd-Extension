@@ -8,27 +8,120 @@ order-of-a-list-is-preserved
 same-list-returned-if-n-equals-size
   extensions [ rnd ]
   O> set glob1 ["a" "s" "d" "f" "g" "h" "j" "k" "l"]
-  glob1 = rnd:weighted-n-of length glob1  glob1 [ 1.0 ] => true
+  glob1 = rnd:weighted-n-of length glob1 glob1 [ 1.0 ] => true
 
 same-agentset-returned-if-n-equals-size
   extensions [ rnd ]
-  O> crt 10
-  turtles = rnd:weighted-n-of count turtles turtles [ 1.0 ] => true
+  O> crt 10 [ create-links-with other turtles ]
+  rnd:weighted-n-of count turtles turtles [ 1.0 ] = turtles => true
+  rnd:weighted-n-of count patches patches [ 1.0 ] = patches => true
+  rnd:weighted-n-of count links links [ 1.0 ] = links => true
+
+same-arrayagentset-returned-if-n-equals-size
+  extensions [ rnd ]
+  O> crt 10 [ set color black ]
+  O> ask n-of 5 turtles [ set color red ]
+  turtles with [ color = red ] = rnd:weighted-n-of 5 turtles with [ color = red ] [ 1.0 ] => true
 
 first-input-cannot-be-negative
   extensions [ rnd ]
   rnd:weighted-n-of -1 [] [ 1.0 ] => ERROR Extension exception: First input to WEIGHTED-N-OF can't be negative.
   rnd:weighted-n-of -1 [1 2 3] [ 1.0 ] => ERROR Extension exception: First input to WEIGHTED-N-OF can't be negative.
+  rnd:weighted-n-of -1 turtles [ 1.0 ] => ERROR Extension exception: First input to WEIGHTED-N-OF can't be negative.
 
 requesting-zero-items-from-list-gives-empty-list
   extensions [ rnd ]
-  rnd:weighted-n-of 0 [] [ 1.0 ] => []
   rnd:weighted-n-of 0 [1 2 3] [ 1.0 ] => []
 
+requesting-zero-items-from-agentset-gives-empty-agentset
+  extensions [ rnd ]
+  O> crt 10
+  rnd:weighted-n-of 0 turtles [ 1.0 ] = no-turtles => true
 
-  #n-of 1 [] => ERROR Requested 1 random items from a list of length 0.
-  #n-of 1 [99] => [99]
-  #n-of 2 [1 2] => [1 2]
-  #sum n-values 20 [sum n-of 10 n-values 10 [?]] => 900
-  #sum n-values 20 [sum n-values 10 [length n-of ? n-values 10 [?]]] => 900
-  #length remove-duplicates n-values 1000 [n-of 1 n-values 10 [?]] => 10
+requesting-zero-items-from-empty-list-gives-empty-list
+  extensions [ rnd ]
+  rnd:weighted-n-of 0 [] [ 1.0 ] => []
+
+requesting-zero-items-from-empty-agentset-gives-empty-agentset
+  extensions [ rnd ]
+  rnd:weighted-n-of 0 turtles [ 1.0 ] = no-turtles => true
+
+requesting-from-empty-list-gives-error
+  extensions [ rnd ]
+  rnd:weighted-n-of 1 [] [ 1.0 ] => ERROR Extension exception: Requested 1 random items but only got 0 candidates.
+
+requesting-from-empty-agentset-gives-error
+  extensions [ rnd ]
+  rnd:weighted-n-of 1 turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random items but only got 0 candidates.
+
+requesting-more-items-than-in-list-gives-error
+  extensions [ rnd ]
+  rnd:weighted-n-of 5 [1 2 3] [ 1.0 ] => ERROR Extension exception: Requested 5 random items but only got 3 candidates.
+
+requesting-more-items-than-in-agentset-gives-error
+  extensions [ rnd ]
+  O> crt 3
+  rnd:weighted-n-of 5 turtles [ 1.0 ] => ERROR Extension exception: Requested 5 random items but only got 3 candidates.
+
+requesting-more-items-than-items-with-positive-weights-in-list-gives-error
+  extensions [ rnd ]
+  O> set glob1 [0 0 0 1 1]
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Requested 3 random items when only 2 candidates have weight > 0.0.
+
+requesting-more-items-than-items-with-positive-weights-in-agentset-gives-error
+  extensions [ rnd ]
+  O> crt 5 [ set tvar 0.0 ]
+  O> ask n-of 2 turtles [ set tvar 1.0 ]
+  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Requested 3 random items when only 2 candidates have weight > 0.0.
+
+negative-weight-gives-error-with-list
+  extensions [ rnd ]
+  O> set glob1 [1 1 -1 1 1]
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Got -1.0 as a weight but all weights must be >= 0.0.
+
+negative-weight-gives-error-with-agentset
+  extensions [ rnd ]
+  O> crt 5 [ set tvar 1 ]
+  O> ask n-of 1 turtles [ set tvar -1 ]
+  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Got -1.0 as a weight but all weights must be >= 0.0.
+
+non-numeric-weight-gives-error-with-list
+  extensions [ rnd ]
+  O> set glob1 [1 1 "x" 1 1]
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Got x as a weight but all weights must be numbers.
+
+non-numeric-weight-gives-error-with-agentset
+  extensions [ rnd ]
+  O> crt 5 [ set tvar 1 ]
+  O> ask n-of 1 turtles [ set tvar "x" ]
+  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Got x as a weight but all weights must be numbers.
+
+only-positive-weights-get-selected-from-list
+  extensions [ rnd ]
+  O> set glob1 [1 0 1 0 1]
+  remove-duplicates n-values 1000 [ rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] ] => [[0 2 4]]
+
+only-positive-weights-get-selected-from-agentset
+  extensions [ rnd ]
+  O> crt 5 [ set tvar 0 ]
+  O> set glob1 n-of 3 turtles
+  O> ask glob1 [ set tvar 1 ]
+  turtle-set n-values 1000 [ rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] ] = glob1 => true
+
+too-many-inputs-for-task-should-give-error
+  extensions [ rnd ]
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ ?1 + ?2 ] => ERROR Extension exception: Task expected only 1 input but got 2.
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ ?1 + ?2 + ?3] => ERROR Extension exception: Task expected only 1 input but got 3.
+
+two-for-one-ratio-roughly-respected
+  extensions [ rnd ]
+  O> set glob1 n-values 1E4 [ first rnd:weighted-n-of 1 [2 1] [ ? ] ]
+  O> set glob2 (length filter [ ? = 2 ] glob1) / (length filter [ ? = 1 ] glob1)
+  precision glob2 1 => 2
+
+relative-order-of-weights-respected-in-sampling
+  extensions [ rnd ]
+  O> set glob1 n-values 1E5 [ first rnd:weighted-n-of 1 (n-values 10 [ ? ]) [ ? ] ]
+  O> set glob2 n-values 10 [ 0 ]
+  O> foreach glob1 [ set glob2 replace-item ? glob2 (item ? glob2 + 1) ]
+  glob2 = sort glob2 => true
