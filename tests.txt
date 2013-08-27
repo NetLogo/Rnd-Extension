@@ -127,7 +127,7 @@ too-many-inputs-for-task-should-give-error
 
 two-for-one-ratio-roughly-respected
   extensions [ rnd ]
-  O> set glob1 n-values 1E4 [ first rnd:weighted-n-of 1 [2 1] [ ? ] ]
+  O> set glob1 n-values 1E5 [ first rnd:weighted-n-of 1 [2 1] [ ? ] ]
   O> set glob2 (length filter [ ? = 2 ] glob1) / (length filter [ ? = 1 ] glob1)
   precision glob2 1 => 2
 
