@@ -34,7 +34,7 @@ object WeightedNOfPrim extends DefaultReporter {
 
     val count = weights.count(_ > 0.0)
     if (count < n) throw new ExtensionException(
-      "Requested " + n + " random items when only " + count + " candidates have weight > 0.0.")
+      "Requested " + n + " random items from " + count + " candidates with weight > 0.0.")
 
     val indices =
       if (count == n) {
@@ -70,7 +70,7 @@ object WeightedNOfPrim extends DefaultReporter {
         case agentSet: agent.AgentSet ⇒ Vector() ++ agentSet.agents.asScala
       }
     if (candidates.size < n) throw new ExtensionException(
-      "Requested " + n + " random items but only got " + candidates.size + " candidates.")
+      "Requested " + n + " random items from " + candidates.size + " candidates.")
     candidates
   }
 

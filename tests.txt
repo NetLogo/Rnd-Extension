@@ -46,33 +46,33 @@ requesting-zero-items-from-empty-agentset-gives-empty-agentset
   extensions [ rnd ]
   rnd:weighted-n-of 0 turtles [ 1.0 ] = no-turtles => true
 
-requesting-from-empty-list-gives-error
+requesting-n-from-empty-list-gives-error
   extensions [ rnd ]
-  rnd:weighted-n-of 1 [] [ 1.0 ] => ERROR Extension exception: Requested 1 random items but only got 0 candidates.
+  rnd:weighted-n-of 1 [] [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
 
-requesting-from-empty-agentset-gives-error
+requesting-n-from-empty-agentset-gives-error
   extensions [ rnd ]
-  rnd:weighted-n-of 1 turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random items but only got 0 candidates.
+  rnd:weighted-n-of 1 turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random items from 0 candidates.
 
 requesting-more-items-than-in-list-gives-error
   extensions [ rnd ]
-  rnd:weighted-n-of 5 [1 2 3] [ 1.0 ] => ERROR Extension exception: Requested 5 random items but only got 3 candidates.
+  rnd:weighted-n-of 5 [1 2 3] [ 1.0 ] => ERROR Extension exception: Requested 5 random items from 3 candidates.
 
 requesting-more-items-than-in-agentset-gives-error
   extensions [ rnd ]
   O> crt 3
-  rnd:weighted-n-of 5 turtles [ 1.0 ] => ERROR Extension exception: Requested 5 random items but only got 3 candidates.
+  rnd:weighted-n-of 5 turtles [ 1.0 ] => ERROR Extension exception: Requested 5 random items from 3 candidates.
 
 requesting-more-items-than-items-with-positive-weights-in-list-gives-error
   extensions [ rnd ]
   O> set glob1 [0 0 0 1 1]
-  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Requested 3 random items when only 2 candidates have weight > 0.0.
+  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Requested 3 random items from 2 candidates with weight > 0.0.
 
 requesting-more-items-than-items-with-positive-weights-in-agentset-gives-error
   extensions [ rnd ]
   O> crt 5 [ set tvar 0.0 ]
   O> ask n-of 2 turtles [ set tvar 1.0 ]
-  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Requested 3 random items when only 2 candidates have weight > 0.0.
+  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Requested 3 random items from 2 candidates with weight > 0.0.
 
 negative-weight-gives-error-with-list
   extensions [ rnd ]
