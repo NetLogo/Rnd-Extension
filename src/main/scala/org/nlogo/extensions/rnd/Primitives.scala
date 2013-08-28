@@ -3,6 +3,7 @@
 package org.nlogo.extensions.rnd
 
 import scala.collection.JavaConverters._
+import scala.collection.breakOut
 import scala.collection.immutable.SortedSet
 
 import org.nlogo.agent
@@ -51,45 +52,41 @@ trait WeightedRndPrim extends DefaultReporter {
     }
   }
 
-  def cumulativeProbabilities(weights: Iterable[Double]): Array[Double] = {
-    val probs = Array.ofDim[Double](weights.size)
+  /**
+   * Calculates the cumulative probability from the weights array.
+   * Mutates the probs array in place.
+   */
+  private def updateCumulativeProbabilities(
+    weights: Array[Double],
+    probs: Array[Double]): Unit = {
     var sum = 0.0
-    for ((w, i) ← weights.zipWithIndex) {
-      sum += w
+    for (i ← weights.indices) {
+      sum += weights(i)
       probs(i) = sum
     }
-    probs
   }
 
   def pickIndices(n: Int, candidates: Vector[AnyRef],
-    weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast) = {
-    val weights = candidates.map(weightFunction)
-    val count = weights.count(_ > 0.0)
-    if (count < n) throw new ExtensionException(
-      "Requested " + pluralize(n, "random item") +
-        " from " + pluralize(count, "candidate") +
-        " with weight > 0.0.")
-    if (count == n) {
-      weights.zipWithIndex.collect { case (w, i) if w > 0 ⇒ i }
-    } else {
-      val probs = cumulativeProbabilities(weights)
-      /*
-       * This is a much too naive implementation.
-       *
-       * Potential problem:
-       *   rnd:weighted-n-of 999 (n-values 1000 [ ? ]) [ ifelse-value (? = 0) [ 1E10 ] [ 1E-10 ] ]
-       * ...won't terminate in a long long time.
-       *
-       * Potential fix: exclude already selected items and
-       * recalculate cumulative probabilities?
-       */
-      val max = probs.last
-      var picks = SortedSet[Int]()
-      while (picks.size < n) {
-        val target = rng.nextDouble * max
-        picks += probs.indexWhere(_ > target)
-      }
-      picks
+    weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast): SortedSet[Int] = {
+    val weights: Array[Double] = candidates.map(weightFunction)(breakOut)
+    val probs: Array[Double] = Array.ofDim[Double](weights.size)
+    weights.count(_ > 0.0) match {
+      case count if count < n ⇒
+        throw new ExtensionException(
+          "Requested " + pluralize(n, "random item") +
+            " from " + pluralize(count, "candidate") +
+            " with weight > 0.0.")
+      case count if count == n ⇒
+        (for (i ← weights.indices if weights(i) > 0) yield i)(breakOut)
+      case _ ⇒
+        (1 to n).map { _ ⇒
+          updateCumulativeProbabilities(weights, probs)
+          val max = probs.last
+          val target = rng.nextDouble * max
+          val pick = probs.indexWhere(_ > target)
+          weights(pick) = 0 // so it won't get selected again
+          pick
+        }(breakOut)
     }
   }
 

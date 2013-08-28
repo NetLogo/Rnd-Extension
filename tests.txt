@@ -150,3 +150,12 @@ relative-order-of-weights-respected-in-sampling-with-one-of
   O> set glob2 n-values 10 [ 0 ]
   O> foreach glob1 [ set glob2 replace-item ? glob2 (item ? glob2 + 1) ]
   glob2 = sort glob2 => true
+
+acceptable-performance-when-one-item-outweights-the-others
+  extensions [ rnd ]
+  member? 0 rnd:weighted-n-of 9 (n-values 10 [ ? ]) [ ifelse-value (? = 0) [ 1E10 ] [ 1E-10 ] ] => true
+
+weighted-n-of-always-returns-n-items
+  extensions [ rnd ]
+  O> set glob1 n-values 100 [ ? ]
+  glob1 = map [ length rnd:weighted-n-of ? glob1 [ item ? glob1 ]] glob1 => true
