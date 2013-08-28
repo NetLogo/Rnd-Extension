@@ -2,6 +2,8 @@
 
 This extension adds the [`rnd:weighted-n-of`](#rndweighted-n-of-size-agentset-reporter-task) and [`rnd:weighted-one-of`](#rndweighted-one-of--agentset-reporter-task) primitives to NetLogo.
 
+You can [download the Rnd extension from here](https://github.com/NetLogo/Rnd-Extension/releases/download/v1.0.0/rnd.zip). Just unzip the file under your NetLogo's extensions folder.
+
 ## Usage
 
 #### `rnd:weighted-n-of` _size_ _agentset_ _reporter-task_
