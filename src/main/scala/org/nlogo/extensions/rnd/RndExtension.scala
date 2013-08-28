@@ -7,6 +7,7 @@ import org.nlogo.api.PrimitiveManager
 
 class RndExtension extends DefaultClassManager {
   override def load(primManager: PrimitiveManager) {
-    primManager.addPrimitive(WeightedNOfPrim.name, WeightedNOfPrim)
+    for (prim ← Seq(WeightedNOfPrim, WeightedOneOfPrim))
+      primManager.addPrimitive(prim.name, prim)
   }
 }
