@@ -125,15 +125,28 @@ too-many-inputs-for-task-should-give-error
   rnd:weighted-n-of 3 [0 1 2 3 4] [ ?1 + ?2 ] => ERROR Extension exception: Task expected only 1 input but got 2.
   rnd:weighted-n-of 3 [0 1 2 3 4] [ ?1 + ?2 + ?3] => ERROR Extension exception: Task expected only 1 input but got 3.
 
-two-for-one-ratio-roughly-respected
+two-for-one-ratio-roughly-respected-with-n-of
   extensions [ rnd ]
   O> set glob1 n-values 1E5 [ first rnd:weighted-n-of 1 [2 1] [ ? ] ]
   O> set glob2 (length filter [ ? = 2 ] glob1) / (length filter [ ? = 1 ] glob1)
   precision glob2 1 => 2
 
-relative-order-of-weights-respected-in-sampling
+relative-order-of-weights-respected-in-sampling-with-n-of
   extensions [ rnd ]
   O> set glob1 n-values 1E5 [ first rnd:weighted-n-of 1 (n-values 10 [ ? ]) [ ? ] ]
+  O> set glob2 n-values 10 [ 0 ]
+  O> foreach glob1 [ set glob2 replace-item ? glob2 (item ? glob2 + 1) ]
+  glob2 = sort glob2 => true
+
+two-for-one-ratio-roughly-respected-with-one-of
+  extensions [ rnd ]
+  O> set glob1 n-values 1E5 [ rnd:weighted-one-of [2 1] [ ? ] ]
+  O> set glob2 (length filter [ ? = 2 ] glob1) / (length filter [ ? = 1 ] glob1)
+  precision glob2 1 => 2
+
+relative-order-of-weights-respected-in-sampling-with-one-of
+  extensions [ rnd ]
+  O> set glob1 n-values 1E5 [ rnd:weighted-one-of (n-values 10 [ ? ]) [ ? ] ]
   O> set glob2 n-values 10 [ 0 ]
   O> foreach glob1 [ set glob2 replace-item ? glob2 (item ? glob2 + 1) ]
   glob2 = sort glob2 => true
