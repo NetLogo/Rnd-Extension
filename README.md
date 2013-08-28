@@ -9,7 +9,24 @@ It's currently a very rough, mostly untested, work in progress. Don't use in pro
 #### `rnd:weighted-n-of` _size_ _agentset_ _reporter-task_
 #### `rnd:weighted-n-of` _size_ _list_ _reporter-task_
 
-Picks _size_ items from _agentset_ or _list_, with the probability of each item picked proportional to the weight reported by _reporter-task_ for this item.
+From an agentset, reports an agentset of size _size_ randomly chosen from the input set, with no repeats.
+
+From a list, reports a list of size _size_ randomly chosen from the input set, with no repeats. The items in the result appear in the same order that they appeared in the input list. (If you want them in random order, use shuffle on the result.)
+
+In both cases, the probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item.
+
+It is an error for _size_ to be greater than the size of the input.
+
+The weights reported by _reporter-task_ must not be negative, and there must be at least as many candidates with a positive weight (i.e., >= 0) than the number of requested items (_size_).
+
+#### `rnd:weighted-one-of`  _agentset_ _reporter-task_
+#### `rnd:weighted-one-of`  _list_ _reporter-task_
+
+From an agentset, reports a random agent. If the agentset is empty, reports [`nobody`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#nobody).
+
+From a list, reports a random list item. It is an error for the list to be empty.
+
+In both cases, the probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item.
 
 ## Building
 
