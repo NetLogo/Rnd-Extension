@@ -105,12 +105,16 @@ object WeightedOneOfPrim extends WeightedRndPrim {
     Array(ListType | AgentsetType, ReporterTaskType),
     WildcardType)
 
-  def report(args: Array[Argument], context: Context): AnyRef = {
-    val candidates: Vector[AnyRef] = getCandidates(1, args(0))
-    val weightFunction = getWeightFunction(args(1), context)
-    val i = pickIndices(1, candidates, weightFunction, context.getRNG).head
-    candidates(i)
-  }
+  def report(args: Array[Argument], context: Context): AnyRef =
+    args(0).get match {
+      case agentSet: agent.AgentSet if agentSet.count == 0 ⇒
+        org.nlogo.api.Nobody$.MODULE$
+      case _ ⇒
+        val candidates: Vector[AnyRef] = getCandidates(1, args(0))
+        val weightFunction = getWeightFunction(args(1), context)
+        val i = pickIndices(1, candidates, weightFunction, context.getRNG).head
+        candidates(i)
+    }
 }
 
 object WeightedNOfPrim extends WeightedRndPrim {

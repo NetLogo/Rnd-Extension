@@ -58,9 +58,9 @@ requesting-one-from-empty-list-gives-error
   extensions [ rnd ]
   rnd:weighted-one-of [] [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
 
-requesting-one-from-empty-agentset-gives-error
+requesting-one-from-empty-agentset-gives-nobody
   extensions [ rnd ]
-  rnd:weighted-one-of turtles [ 1.0 ] => ERROR Extension exception: Requested 1 random item from 0 candidates.
+  rnd:weighted-one-of turtles [ 1.0 ] => nobody
 
 requesting-more-items-than-in-list-gives-error
   extensions [ rnd ]
