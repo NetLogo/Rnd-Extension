@@ -1,7 +1,6 @@
 *~
 *.orig
-/project/
-/target/
+target/
 classes/
 *.jar
 *.gz
