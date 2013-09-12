@@ -71,20 +71,19 @@ requesting-more-items-than-in-agentset-gives-error
   O> crt 3
   rnd:weighted-n-of 5 turtles [ 1.0 ] => ERROR Extension exception: Requested 5 random items from 3 candidates.
 
-requesting-one-of-list-with-all-zeros-gives-error
+requesting-one-of-list-with-all-zeros-weights
   extensions [ rnd ]
-  rnd:weighted-one-of [0 0 0] [ ? ] => ERROR Extension exception: Requested 1 random item from 0 candidates with weight > 0.0.
+  rnd:weighted-one-of [1 1 1] [ 0.0 ] => 1
 
-requesting-more-items-than-items-with-positive-weights-in-list-gives-error
+requesting-more-items-than-items-with-positive-weights-in-list
   extensions [ rnd ]
-  O> set glob1 [0 0 0 1 1]
-  rnd:weighted-n-of 3 [0 1 2 3 4] [ item ? glob1 ] => ERROR Extension exception: Requested 3 random items from 2 candidates with weight > 0.0.
+  sort rnd:weighted-n-of 3 [0 0 0 1 1] [ ? ] => [0 1 1]
 
-requesting-more-items-than-items-with-positive-weights-in-agentset-gives-error
+requesting-more-items-than-items-with-positive-weights-in-agentset
   extensions [ rnd ]
   O> crt 5 [ set tvar 0.0 ]
   O> ask n-of 2 turtles [ set tvar 1.0 ]
-  rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => ERROR Extension exception: Requested 3 random items from 2 candidates with weight > 0.0.
+  sort [ tvar ] of rnd:weighted-n-of 3 turtles [ [ tvar ] of ? ] => [0 1 1]
 
 negative-weight-gives-error-with-list
   extensions [ rnd ]

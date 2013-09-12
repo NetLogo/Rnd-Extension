@@ -57,27 +57,25 @@ trait WeightedRndPrim extends DefaultReporter {
   def pickIndices(n: Int, candidates: Vector[AnyRef],
     weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast): SortedSet[Int] = {
 
-    val weights: Array[Double] = candidates.map(weightFunction)(breakOut)
-
-    weights.count(_ > 0.0) match {
-      case count if count < n ⇒
-        throw new ExtensionException(
-          "Requested " + pluralize(n, "random item") +
-            " from " + pluralize(count, "candidate") +
-            " with weight > 0.0.")
-      case count if count == n ⇒
-        (for (i ← weights.indices if weights(i) > 0) yield i)(breakOut)
-      case _ ⇒
-        var unselectedIndices = ListBuffer[Int](weights.indices: _*)
-        (1 to n).map { _ ⇒
-          val originalIndices = unselectedIndices.toArray
-          val ws = unselectedIndices.map(weights)
-          val sum = ws.sum
-          val probs = ws.map(w => Double.box(w / sum)).asJava
-          val i = originalIndices(new AliasMethod(probs, rng).next)
-          unselectedIndices -= i
-          i
-        }(breakOut)
+    if (n == candidates.size)
+      SortedSet[Int](candidates.indices: _*)
+    else {
+      val weights: Array[Double] = candidates.map(weightFunction)(breakOut)
+      var unselectedIndices = ListBuffer[Int](weights.indices: _*)
+      (1 to n).map { _ ⇒
+        val originalIndices = unselectedIndices.toArray
+        val ws = unselectedIndices.map(weights)
+        val sum = ws.sum
+        val i = originalIndices(
+          if (sum == 0.0) { // if we only have 0s left, just pick one at random
+            rng.nextInt(unselectedIndices.length)
+          } else {
+            val probs = ws.map(w => Double.box(w / sum)).asJava
+            new AliasMethod(probs, rng).next
+          })
+        unselectedIndices -= i
+        i
+      }(breakOut)
     }
   }
 
