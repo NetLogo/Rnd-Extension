@@ -6,9 +6,7 @@ import scala.collection.JavaConverters._
 import scala.collection.breakOut
 import scala.collection.immutable
 import scala.collection.immutable.SortedSet
-import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.ListBuffer
-
 import org.nlogo.agent
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
@@ -21,6 +19,7 @@ import org.nlogo.api.LogoListBuilder
 import org.nlogo.api.Syntax._
 import org.nlogo.nvm
 import org.nlogo.util.MersenneTwisterFast
+import scala.annotation.tailrec
 
 trait WeightedRndPrim extends DefaultReporter {
   val name: String
@@ -73,23 +72,27 @@ trait WeightedRndPrim extends DefaultReporter {
     () ⇒ unselectedIndices(pick())
   }
 
-  def pickIndices(n: Int, candidates: Vector[AnyRef],
-    weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast): SortedSet[Int] = {
-
+  def pickIndices(
+    n: Int,
+    candidates: Vector[AnyRef],
+    weightFunction: (AnyRef) ⇒ Double,
+    rng: MersenneTwisterFast): SortedSet[Int] = {
     val weights = candidates.map(weightFunction)
-    var unselectedIndices = immutable.Set[Int](weights.indices: _*)
-    var selectedIndices = SortedSet.empty[Int]
-    var picker = newPickFunction(weights, unselectedIndices.toIndexedSeq, rng)
-    while (selectedIndices.size < n) {
-      val i = picker()
-      if (selectedIndices.contains(i)) {
-        picker = newPickFunction(weights, unselectedIndices.toIndexedSeq, rng)
-      } else {
-        unselectedIndices -= i
-        selectedIndices += i
+    @tailrec def loop(
+      unselected: Set[Int] = weights.indices.toSet,
+      selected: SortedSet[Int] = SortedSet.empty[Int]) //
+      (picker: () ⇒ Int = newPickFunction(weights, unselected.toIndexedSeq, rng)): SortedSet[Int] =
+      if (selected.size == n)
+        selected
+      else {
+        val i = picker()
+        if (selected.contains(i))
+          // use new picker if we start getting duplicates
+          loop(unselected, selected)()
+        else
+          loop(unselected - i, selected + i)(picker)
       }
-    }
-    selectedIndices
+    loop()()
   }
 
   def pluralize(count: Int, word: String) =
