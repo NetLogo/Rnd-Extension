@@ -34,17 +34,23 @@ object Picker {
     weightFunction: (AnyRef) ⇒ Double,
     rng: MersenneTwisterFast): SortedSet[Int] = {
     val weights = candidates.map(weightFunction)
+    val maxDuplicates = 64 // how many dups before we rebuild picker
     @tailrec def loop(
       unselected: Set[Int] = weights.indices.toSet,
-      selected: SortedSet[Int] = SortedSet.empty[Int]) //
+      selected: SortedSet[Int] = SortedSet.empty[Int],
+      duplicatesCount: Int = 0) //
       (picker: () ⇒ Int = newPickFunction(weights, unselected.toIndexedSeq, rng)): SortedSet[Int] =
       if (selected.size == n)
         selected
       else {
         val i = picker()
         if (selected.contains(i))
-          // use new picker if we start getting duplicates
-          loop(unselected, selected)()
+          if (duplicatesCount == maxDuplicates)
+            // new picker, duplicateCount back to 0
+            loop(unselected, selected)()
+          else
+            // keep same picker for now but increase duplicateCount
+            loop(unselected, selected, duplicatesCount + 1)(picker)
         else
           loop(unselected - i, selected + i)(picker)
       }
