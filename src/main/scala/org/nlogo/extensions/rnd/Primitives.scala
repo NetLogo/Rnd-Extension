@@ -3,10 +3,7 @@
 package org.nlogo.extensions.rnd
 
 import scala.collection.JavaConverters._
-import scala.collection.breakOut
-import scala.collection.immutable
-import scala.collection.immutable.SortedSet
-import scala.collection.mutable.ListBuffer
+
 import org.nlogo.agent
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
@@ -18,8 +15,6 @@ import org.nlogo.api.LogoList
 import org.nlogo.api.LogoListBuilder
 import org.nlogo.api.Syntax._
 import org.nlogo.nvm
-import org.nlogo.util.MersenneTwisterFast
-import scala.annotation.tailrec
 
 trait WeightedRndPrim extends DefaultReporter {
   val name: String
@@ -54,47 +49,6 @@ trait WeightedRndPrim extends DefaultReporter {
     }
   }
 
-  def newPickFunction(
-    allWeights: immutable.IndexedSeq[Double],
-    unselectedIndices: immutable.IndexedSeq[Int],
-    rng: MersenneTwisterFast): () ⇒ Int = {
-    val unselectedWeights = unselectedIndices.map(allWeights)
-    val sum = unselectedWeights.sum
-    val pick: () ⇒ Int =
-      if (sum == 0.0) { // if we only have 0s left, just pick one at random
-        () ⇒ rng.nextInt(unselectedIndices.length)
-      } else {
-        val probs: ListBuffer[java.lang.Double] =
-          unselectedWeights.map(w ⇒ Double.box(w / sum))(breakOut)
-        val aliasMethod = new AliasMethod(probs.asJava, rng)
-        () ⇒ aliasMethod.next
-      }
-    () ⇒ unselectedIndices(pick())
-  }
-
-  def pickIndices(
-    n: Int,
-    candidates: Vector[AnyRef],
-    weightFunction: (AnyRef) ⇒ Double,
-    rng: MersenneTwisterFast): SortedSet[Int] = {
-    val weights = candidates.map(weightFunction)
-    @tailrec def loop(
-      unselected: Set[Int] = weights.indices.toSet,
-      selected: SortedSet[Int] = SortedSet.empty[Int]) //
-      (picker: () ⇒ Int = newPickFunction(weights, unselected.toIndexedSeq, rng)): SortedSet[Int] =
-      if (selected.size == n)
-        selected
-      else {
-        val i = picker()
-        if (selected.contains(i))
-          // use new picker if we start getting duplicates
-          loop(unselected, selected)()
-        else
-          loop(unselected - i, selected + i)(picker)
-      }
-    loop()()
-  }
-
   def pluralize(count: Int, word: String) =
     count + " " + word + (if (count != 1) "s" else "")
 }
@@ -114,7 +68,7 @@ object WeightedOneOfPrim extends WeightedRndPrim {
       case _ ⇒
         val candidates: Vector[AnyRef] = getCandidates(1, args(0))
         val weightFunction = getWeightFunction(args(1), context)
-        val i = pickIndices(1, candidates, weightFunction, context.getRNG).head
+        val i = Picker.pickIndices(1, candidates, weightFunction, context.getRNG).head
         candidates(i)
     }
 }
@@ -134,7 +88,7 @@ object WeightedNOfPrim extends WeightedRndPrim {
     val candidates: Vector[AnyRef] = getCandidates(n, args(1))
     if (n == candidates.size) return args(1).get // short-circuit everything...
     val weightFunction = getWeightFunction(args(2), context)
-    val indices = pickIndices(n, candidates, weightFunction, context.getRNG)
+    val indices = Picker.pickIndices(n, candidates, weightFunction, context.getRNG)
     args(1).get match {
       case list: LogoList ⇒
         val b = new LogoListBuilder
