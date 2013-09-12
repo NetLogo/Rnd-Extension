@@ -2,9 +2,11 @@
 
 package org.nlogo.extensions.rnd
 
+import scala.Array.canBuildFrom
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
 import scala.collection.immutable.SortedSet
+import scala.collection.mutable.ListBuffer
 
 import org.nlogo.agent
 import org.nlogo.api.Argument
@@ -52,24 +54,11 @@ trait WeightedRndPrim extends DefaultReporter {
     }
   }
 
-  /**
-   * Calculates the cumulative probability from the weights array.
-   * Mutates the probs array in place.
-   */
-  private def updateCumulativeProbabilities(
-    weights: Array[Double],
-    probs: Array[Double]): Unit = {
-    var sum = 0.0
-    for (i ← weights.indices) {
-      sum += weights(i)
-      probs(i) = sum
-    }
-  }
-
   def pickIndices(n: Int, candidates: Vector[AnyRef],
     weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast): SortedSet[Int] = {
+
     val weights: Array[Double] = candidates.map(weightFunction)(breakOut)
-    val probs: Array[Double] = Array.ofDim[Double](weights.size)
+
     weights.count(_ > 0.0) match {
       case count if count < n ⇒
         throw new ExtensionException(
@@ -79,13 +68,15 @@ trait WeightedRndPrim extends DefaultReporter {
       case count if count == n ⇒
         (for (i ← weights.indices if weights(i) > 0) yield i)(breakOut)
       case _ ⇒
+        var unselectedIndices = ListBuffer[Int](weights.indices: _*)
         (1 to n).map { _ ⇒
-          updateCumulativeProbabilities(weights, probs)
-          val max = probs.last
-          val target = rng.nextDouble * max
-          val pick = probs.indexWhere(_ > target)
-          weights(pick) = 0 // so it won't get selected again
-          pick
+          val originalIndices = unselectedIndices.toArray
+          val ws = unselectedIndices.map(weights)
+          val sum = ws.sum
+          val probs = ws.map(w => Double.box(w / sum)).asJava
+          val i = originalIndices(new AliasMethod(probs, rng).next)
+          unselectedIndices -= i
+          i
         }(breakOut)
     }
   }
