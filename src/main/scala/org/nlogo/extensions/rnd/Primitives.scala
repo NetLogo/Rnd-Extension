@@ -2,10 +2,11 @@
 
 package org.nlogo.extensions.rnd
 
-import scala.Array.canBuildFrom
 import scala.collection.JavaConverters._
 import scala.collection.breakOut
+import scala.collection.immutable
 import scala.collection.immutable.SortedSet
+import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.ListBuffer
 
 import org.nlogo.agent
@@ -54,25 +55,41 @@ trait WeightedRndPrim extends DefaultReporter {
     }
   }
 
+  def newPickFunction(
+    allWeights: immutable.IndexedSeq[Double],
+    unselectedIndices: immutable.IndexedSeq[Int],
+    rng: MersenneTwisterFast): () ⇒ Int = {
+    val unselectedWeights = unselectedIndices.map(allWeights)
+    val sum = unselectedWeights.sum
+    val pick: () ⇒ Int =
+      if (sum == 0.0) { // if we only have 0s left, just pick one at random
+        () ⇒ rng.nextInt(unselectedIndices.length)
+      } else {
+        val probs: ListBuffer[java.lang.Double] =
+          unselectedWeights.map(w ⇒ Double.box(w / sum))(breakOut)
+        val aliasMethod = new AliasMethod(probs.asJava, rng)
+        () ⇒ aliasMethod.next
+      }
+    () ⇒ unselectedIndices(pick())
+  }
+
   def pickIndices(n: Int, candidates: Vector[AnyRef],
     weightFunction: (AnyRef) ⇒ Double, rng: MersenneTwisterFast): SortedSet[Int] = {
 
-    val weights: Array[Double] = candidates.map(weightFunction)(breakOut)
-    var unselectedIndices = ListBuffer[Int](weights.indices: _*)
-    (1 to n).map { _ ⇒
-      val originalIndices = unselectedIndices.toArray
-      val ws = unselectedIndices.map(weights)
-      val sum = ws.sum
-      val i = originalIndices(
-        if (sum == 0.0) { // if we only have 0s left, just pick one at random
-          rng.nextInt(unselectedIndices.length)
-        } else {
-          val probs = ws.map(w => Double.box(w / sum)).asJava
-          new AliasMethod(probs, rng).next
-        })
-      unselectedIndices -= i
-      i
-    }(breakOut)
+    val weights = candidates.map(weightFunction)
+    var unselectedIndices = immutable.Set[Int](weights.indices: _*)
+    var selectedIndices = SortedSet.empty[Int]
+    var picker = newPickFunction(weights, unselectedIndices.toIndexedSeq, rng)
+    while (selectedIndices.size < n) {
+      val i = picker()
+      if (selectedIndices.contains(i)) {
+        picker = newPickFunction(weights, unselectedIndices.toIndexedSeq, rng)
+      } else {
+        unselectedIndices -= i
+        selectedIndices += i
+      }
+    }
+    selectedIndices
   }
 
   def pluralize(count: Int, word: String) =
