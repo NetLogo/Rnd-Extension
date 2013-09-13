@@ -86,7 +86,6 @@ object WeightedNOfPrim extends WeightedRndPrim {
     if (n < 0) throw new ExtensionException(I18N.errors.getN(
       "org.nlogo.prim.etc.$common.firstInputCantBeNegative", name))
     val candidates: Vector[AnyRef] = getCandidates(n, args(1))
-    if (n == candidates.size) return args(1).get // short-circuit everything...
     val weightFunction = getWeightFunction(args(2), context)
     val indices = Picker.pickIndices(n, candidates, weightFunction, context.getRNG)
     args(1).get match {

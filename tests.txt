@@ -164,3 +164,11 @@ weighted-n-of-always-returns-n-items
   extensions [ rnd ]
   O> set glob1 n-values 100 [ ? ]
   glob1 = map [ length rnd:weighted-n-of ? glob1 [ item ? glob1 ]] glob1 => true
+
+return-different-agentset-even-if-requesting-all-agents
+  extensions [ rnd ]
+  O> crt 5
+  O> set glob1 rnd:weighted-n-of 5 turtles [ 1.0 ]
+  count glob1 => 5
+  O> crt 1
+  count glob1 => 5
