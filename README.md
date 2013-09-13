@@ -17,7 +17,9 @@ In both cases, the probability of each item being picked is proportional to the 
 
 It is an error for _size_ to be greater than the size of the input.
 
-The weights reported by _reporter-task_ must not be negative, and there must be at least as many candidates with a positive weight (i.e., >= 0) than the number of requested items ( _size_ ).
+The weights reported by _reporter-task_ must not be negative.
+
+If, at some point during the selection, there remains only candidates with a weight of `0.0`, they all have an equal probability of getting picked.
 
 #### `rnd:weighted-one-of`  _agentset_ _reporter-task_
 #### `rnd:weighted-one-of`  _list_ _reporter-task_
@@ -28,7 +30,9 @@ From a list, reports a random list item. It is an error for the list to be empty
 
 In both cases, the probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item.
 
-The weights reported by _reporter-task_ must not be negative, and there must be at least one candidate with a positive weight.
+The weights reported by _reporter-task_ must not be negative.
+
+If all weights are `0.0`, each candidate has an equal probability of being picked.
 
 ## Building
 
