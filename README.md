@@ -61,7 +61,7 @@ For example, in the following code:
 
 (Also note that composing `n-values` with `rnd:weighted-one-of` does not preserve the order of the original candidate list, while `rnd:weighted-n-of-with-repeats` does.)
 
-Things are a bit more complicated if you are choosing **without repeats**, however. In this case, the algorithm may have to discard some picks because the candidates have already been selected. When this starts happening too often (maybe because some weights are much bigger than others), the extension re-initializes the algorithm with the already-picked candidates excluded. This should not happen too often, however, so while picking without repeats has an upper bound of _O(m * n)_ _in theory_, it should usually not be much more than O(m + n) in practice.
+Things are a bit more complicated if you are choosing **without repeats**, however. In this case, the algorithm may have to discard some picks because the candidates have already been selected. When this starts happening too often (maybe because some weights are much bigger than others), the extension re-initializes the algorithm with the already-picked candidates excluded. This should not happen too often, however, so while picking without repeats has an upper bound of _O(m * n)_ _in theory_, it should usually not be much more than _O(m + n)_ in practice.
 
 ## Building
 
