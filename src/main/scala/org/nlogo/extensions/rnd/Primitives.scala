@@ -2,7 +2,7 @@
 
 package org.nlogo.extensions.rnd
 
-import scala.collection.JavaConverters._
+import scala.collection.immutable.SortedSet
 
 import org.nlogo.agent
 import org.nlogo.api.Argument
@@ -15,18 +15,23 @@ import org.nlogo.api.LogoList
 import org.nlogo.api.LogoListBuilder
 import org.nlogo.api.Syntax._
 import org.nlogo.nvm
+import org.nlogo.util.MersenneTwisterFast
 
 trait WeightedRndPrim extends DefaultReporter {
   val name: String
 
-  def getCandidates(n: Int, arg: Argument): Vector[AnyRef] = {
+  def getCandidates(minSize: Int, arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val candidates =
       arg.get match {
-        case list: LogoList           ⇒ list.toVector
-        case agentSet: agent.AgentSet ⇒ Vector() ++ agentSet.agents.asScala
+        case list: LogoList ⇒ list.toVector
+        case agentSet: agent.AgentSet ⇒
+          val b = Vector.newBuilder[AnyRef]
+          val it = agentSet.shufflerator(rng)
+          while (it.hasNext) b += it.next
+          b.result
       }
-    if (candidates.size < n) throw new ExtensionException(
-      "Requested " + pluralize(n, "random item") +
+    if (candidates.size < minSize) throw new ExtensionException(
+      "Requested " + pluralize(minSize, "random item") +
         " from " + pluralize(candidates.size, "candidate") + ".")
     candidates
   }
@@ -66,37 +71,75 @@ object WeightedOneOfPrim extends WeightedRndPrim {
       case agentSet: agent.AgentSet if agentSet.count == 0 ⇒
         org.nlogo.api.Nobody$.MODULE$
       case _ ⇒
-        val candidates: Vector[AnyRef] = getCandidates(1, args(0))
+        val rng = context.getRNG
+        val candidates: Vector[AnyRef] = getCandidates(1, args(0), rng)
         val weightFunction = getWeightFunction(args(1), context)
-        val i = Picker.pickIndices(1, candidates, weightFunction, context.getRNG).head
+        val i = Picker.pickIndicesWithRepeats(1, candidates, weightFunction, rng).head
         candidates(i)
     }
 }
 
-object WeightedNOfPrim extends WeightedRndPrim {
+trait WeightedNOfPrim extends WeightedRndPrim {
 
-  override val name = "WEIGHTED-N-OF"
+  def pickIndices(n: Int,
+    candidates: Vector[AnyRef],
+    weightFunction: (AnyRef) ⇒ Double,
+    rng: MersenneTwisterFast): Iterable[Int]
 
-  override def getSyntax = reporterSyntax(
-    Array(NumberType, ListType | AgentsetType, ReporterTaskType),
-    ListType | AgentsetType)
+  val allowRepeats: Boolean
 
   def report(args: Array[Argument], context: Context): AnyRef = {
     val n = args(0).getIntValue
     if (n < 0) throw new ExtensionException(I18N.errors.getN(
       "org.nlogo.prim.etc.$common.firstInputCantBeNegative", name))
-    val candidates: Vector[AnyRef] = getCandidates(n, args(1))
+    val rng = context.getRNG
+    val minSize = if (allowRepeats) math.min(n, 1) else n
+    val candidates: Vector[AnyRef] = getCandidates(minSize, args(1), rng)
     val weightFunction = getWeightFunction(args(2), context)
-    val indices = Picker.pickIndices(n, candidates, weightFunction, context.getRNG)
+    val indices = pickIndices(n, candidates, weightFunction, rng)
+
+    def buildList: LogoList = {
+      val b = new LogoListBuilder
+      for (i ← indices) b.add(candidates(i))
+      b.toLogoList
+    }
+
+    def buildAgentSet(originalAgentSet: agent.AgentSet): agent.ArrayAgentSet = {
+      val b = Array.newBuilder[agent.Agent]
+      for (i ← indices) b += candidates(i).asInstanceOf[agent.Agent]
+      new agent.ArrayAgentSet(originalAgentSet.`type`, b.result, originalAgentSet.world)
+    }
+
     args(1).get match {
-      case list: LogoList ⇒
-        val b = new LogoListBuilder
-        for (i ← indices) b.add(candidates(i))
-        b.toLogoList
-      case agentSet: agent.AgentSet ⇒
-        val b = Array.newBuilder[agent.Agent]
-        for (i ← indices) b += candidates(i).asInstanceOf[agent.Agent]
-        new agent.ArrayAgentSet(agentSet.`type`, b.result, agentSet.world)
+      case _: LogoList                       ⇒ buildList
+      case _: agent.AgentSet if allowRepeats ⇒ buildList
+      case agentSet: agent.AgentSet          ⇒ buildAgentSet(agentSet)
     }
   }
+}
+
+object WeightedNOfWithoutRepeatsPrim extends WeightedNOfPrim {
+  override val name = "WEIGHTED-N-OF"
+  override val allowRepeats = false
+  override def getSyntax = reporterSyntax(
+    Array(NumberType, ListType | AgentsetType, ReporterTaskType),
+    ListType | AgentsetType) // returns either list or agentset depending on args(1)
+  override def pickIndices(n: Int,
+    candidates: Vector[AnyRef],
+    weightFunction: (AnyRef) ⇒ Double,
+    rng: MersenneTwisterFast): SortedSet[Int] =
+    Picker.pickIndicesWithoutRepeats(n, candidates, weightFunction, rng)
+}
+
+object WeightedNOfWithRepeatsPrim extends WeightedNOfPrim {
+  override val name = "WEIGHTED-N-OF-WITH-REPEATS"
+  override val allowRepeats = true
+  override def getSyntax = reporterSyntax(
+    Array(NumberType, ListType | AgentsetType, ReporterTaskType),
+    ListType) // always returns a list because agentsets don't allow repeats
+  override def pickIndices(n: Int,
+    candidates: Vector[AnyRef],
+    weightFunction: (AnyRef) ⇒ Double,
+    rng: MersenneTwisterFast): Seq[Int] =
+    Picker.pickIndicesWithRepeats(n, candidates, weightFunction, rng)
 }

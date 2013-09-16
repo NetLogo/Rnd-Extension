@@ -28,7 +28,7 @@ object Picker {
     () ⇒ unselectedIndices(pick())
   }
 
-  def pickIndices(
+  def pickIndicesWithoutRepeats(
     n: Int,
     candidates: Vector[AnyRef],
     weightFunction: (AnyRef) ⇒ Double,
@@ -55,5 +55,16 @@ object Picker {
           loop(unselected - i, selected + i)(picker)
       }
     loop()()
+  }
+
+  def pickIndicesWithRepeats(
+    n: Int,
+    candidates: Vector[AnyRef],
+    weightFunction: (AnyRef) ⇒ Double,
+    rng: MersenneTwisterFast): Vector[Int] = {
+    val weights = candidates.map(weightFunction)
+    val picker: () ⇒ Int = newPickFunction(weights, weights.indices, rng)
+    val indices: Vector[Int] = (1 to n).map(_ ⇒ picker())(breakOut)
+    indices.sorted
   }
 }
