@@ -41,7 +41,7 @@ From either an agent or a list, reports a **list** of size _size_ randomly chose
 
 The probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item.
 
-It is **not** an error for _size_ to be greater than the size of the input.
+It is **not** an error for _size_ to be greater than the size of the input, but there has to be at least one candidate.
 
 The weights reported by _reporter-task_ must not be negative.
 
