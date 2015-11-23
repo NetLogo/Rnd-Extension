@@ -19,6 +19,8 @@ The weights reported by _reporter-task_ must not be negative.
 
 If all weights are `0.0`, each candidate has an equal probability of being picked.
 
+***
+
 #### `rnd:weighted-n-of` _size_ _agentset_ _reporter-task_
 #### `rnd:weighted-n-of` _size_ _list_ _reporter-task_
 
@@ -35,6 +37,8 @@ The weights reported by _reporter-task_ must not be negative.
 If, at some point during the selection, there remains only candidates with a weight of `0.0`, they all have an equal probability of getting picked.
 
 [This stackoverflow answer](http://stackoverflow.com/a/25165327/487946) shows an example of using `rnd:weighted-n-of` to simulate a normally distributed version of [`n-of`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#n-of).
+
+***
 
 #### `rnd:weighted-n-of-with-repeats` _size_ _agentset_ _reporter-task_
 #### `rnd:weighted-n-of-with-repeats` _size_ _list_ _reporter-task_
