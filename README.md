@@ -13,7 +13,14 @@ From an agentset, reports a random agent. If the agentset is empty, reports [`no
 
 From a list, reports a random list item. It is an error for the list to be empty.
 
-In both cases, the probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item.
+In both cases, the probability of each item being picked is proportional to the weight reported by _reporter-task_ for this item. The input to the reporter task (i.e., `?`) is the item itself. A common way to use the primitive is to have a list of lists, where the first item of each sublist is the thing you want to choose and the second item is the weight. Here is a short example:
+
+```
+let probs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
+print n-values 10 [ first rnd:weighted-one-of probs [ last ? ] ]
+```
+
+This should print a list of ten letters with roughly four Bs for an A.
 
 The weights reported by _reporter-task_ must not be negative.
 
