@@ -26,6 +26,16 @@ The weights reported by _reporter-task_ must not be negative.
 
 If all weights are `0.0`, each candidate has an equal probability of being picked.
 
+When used with an agentset, you need to use the same syntax as when you use lists. That is, you _cannot_ write:
+
+    rnd:weighted-one-of turtles [ size ] ; will NOT work!
+
+You need to write:
+
+    rnd:weighted-one-of turtles [ [ size ] of ? ]
+
+This is admittedly confusing and we would like to [fix it eventually](https://github.com/NetLogo/Rnd-Extension/issues/5).
+
 ***
 
 #### `rnd:weighted-n-of` _size_ _agentset_ _reporter-task_
@@ -40,6 +50,8 @@ In both cases, the probability of each item being picked is proportional to the 
 It is an error for _size_ to be greater than the size of the input.
 
 The weights reported by _reporter-task_ must not be negative.
+
+Note that you need to use the same reporter task syntax (i.e., with `?`) with both lists and agentsets. See [`rnd:weighted-one-of`](#rndweighted-one-of--agentset-reporter-task) for an example.
 
 If, at some point during the selection, there remains only candidates with a weight of `0.0`, they all have an equal probability of getting picked.
 
@@ -59,6 +71,8 @@ It is **not** an error for _size_ to be greater than the size of the input, but 
 The weights reported by _reporter-task_ must not be negative.
 
 If all weights are `0.0`, each candidate has an equal probability of being picked.
+
+Note that you need to use the same reporter task syntax (i.e., with `?`) with both lists and agentsets. See [`rnd:weighted-one-of`](#rndweighted-one-of--agentset-reporter-task) for an example.
 
 ### A note about performance
 
