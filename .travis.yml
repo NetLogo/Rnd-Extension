@@ -1,0 +1,11 @@
+sudo: false
+cache:
+  apt: true
+  directories:
+  - $HOME/.ivy2
+  - $HOME/.sbt/boot
+  - $HOME/.sbt/launchers
+  - $HOME/.sbt/0.13/staging
+language: scala
+scala:
+   - 2.9.3

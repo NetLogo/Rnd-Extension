@@ -1,13 +1,20 @@
 scalaVersion := "2.9.3"
 
-scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "UTF8")
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "UTF8")
 
-libraryDependencies ++= Seq(
-  "org.nlogo" % "NetLogo" % "5.2.0" from "http://ccl.northwestern.edu/netlogo/5.2.0/NetLogo.jar"
-)
+libraryDependencies +=
+  "org.nlogo" % "NetLogo" % "5.3.0" from
+    "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/NetLogo-5.3.0.jar"
 
 name := "rnd"
 
-NetLogoExtension.settings
+enablePlugins(org.nlogo.build.NetLogoExtension)
 
-NetLogoExtension.classManager := "org.nlogo.extensions.rnd.RndExtension"
+netLogoExtName := "rnd"
+
+netLogoClassManager := "org.nlogo.extensions.rnd.RndExtension"
+
+netLogoZipSources := false
+
+netLogoTarget :=
+    org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)

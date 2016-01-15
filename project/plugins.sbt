@@ -1,3 +1,2 @@
-addSbtPlugin("org.nlogo" % "netlogo-extension-plugin" % "1.1_5.1.x" from "http://ccl.northwestern.edu/devel/netlogo-extension-plugin-1.1_5.1.x.jar")
-
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.2.0")
+addSbtPlugin("org.nlogo" % "netlogo-extension-plugin" % "2.4_5.3-M1" from
+  "https://github.com/NetLogo/NetLogo-Extension-Plugin/releases/download/v2.4-M1_5.3.x/netlogo-extension-plugin-2.4-M1_5.3.x.jar")
