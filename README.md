@@ -100,15 +100,25 @@ It is an error for the list to be empty.
 A common way to use the primitive is to have a list of lists, where the first item of each sublist is the thing you want to choose and the second item is the weight. Here is a short example:
 
 ```
-let probs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
+let pairs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
 repeat 25 [
   ; report the first item of the pair selected using
   ; the second item (i.e., `last ?`) as the weight
-  type first rnd:weighted-one-of-list probs [ last ? ]
+  type first rnd:weighted-one-of-list pairs [ last ? ]
 ]
 ```
 
 This should print `B` roughly four times more often than it prints `A`.
+
+If you happen to have your items and your weights in two separate lists, you can combine them into pairs by using a combination of [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) and [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list):
+
+```
+let items [ "A" "B" "C" ]
+let weights [ 0.1 0.2 0.7 ]
+let pairs (map list items weights)
+```
+
+Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise task syntax (see the [programming guide](http://ccl.northwestern.edu/netlogo/docs/programming.html#Tasks)) to pass [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list) as the reporter task for [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map). The same thing could have been written `(map [ list ?1 ?2 ] items weights)`.
 
 ***
 
@@ -150,8 +160,8 @@ The items in the resulting list appear in the same order that they appeared in t
 
 Example:
 ```
-let probs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
-print map first rnd:weighted-n-of-list-with-repeats 25 probs [ last ? ]
+let pairs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
+print map first rnd:weighted-n-of-list-with-repeats 25 pairs [ last ? ]
 ```
 
 This should print a list of 25 `A`s and `B`s, with roughly four times as many `B`s than `A`s.
