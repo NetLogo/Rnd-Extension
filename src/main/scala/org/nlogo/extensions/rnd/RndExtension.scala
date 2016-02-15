@@ -9,9 +9,12 @@ class RndExtension extends DefaultClassManager {
   override def load(primManager: PrimitiveManager) {
     for {
       prim ← Seq(
-        WeightedNOfWithRepeatsPrim,
-        WeightedNOfWithoutRepeatsPrim,
-        WeightedOneOfPrim)
+        WeightedOneOfAgentSet,
+        WeightedOneOfList,
+        WeightedNOfAgentSetWithRepeats,
+        WeightedNOfListWithRepeats,
+        WeightedNOfAgentSetWithoutRepeats,
+        WeightedNOfListWithoutRepeats)
     } primManager.addPrimitive(prim.name, prim)
   }
 }
