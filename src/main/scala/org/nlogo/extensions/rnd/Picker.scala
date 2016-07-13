@@ -7,7 +7,7 @@ import scala.collection.immutable
 import scala.collection.immutable.SortedSet
 import scala.collection.mutable.ListBuffer
 
-import org.nlogo.util.MersenneTwisterFast
+import org.nlogo.api.MersenneTwisterFast
 
 object Picker {
   def newPickFunction(

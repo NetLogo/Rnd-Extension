@@ -108,7 +108,7 @@ declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory
 declare -r latest_28="2.8.2"
 declare -r latest_29="2.9.3"
 declare -r latest_210="2.10.5"
-declare -r latest_211="2.11.7"
+declare -r latest_211="2.11.8"
 declare -r latest_212="2.12.0-M3"
 
 declare -r script_path="$(get_script_path "$BASH_SOURCE")"

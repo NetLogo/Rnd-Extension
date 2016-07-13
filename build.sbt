@@ -1,14 +1,10 @@
-scalaVersion := "2.9.3"
+scalaVersion := "2.11.7"
+
+enablePlugins(org.nlogo.build.NetLogoExtension)
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "UTF8")
 
-libraryDependencies +=
-  "org.nlogo" % "NetLogo" % "5.3.0" from
-    "http://ccl-artifacts.s3-website-us-east-1.amazonaws.com/NetLogo-5.3.0.jar"
-
 name := "rnd"
-
-enablePlugins(org.nlogo.build.NetLogoExtension)
 
 netLogoExtName := "rnd"
 
@@ -18,3 +14,5 @@ netLogoZipSources := false
 
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
+
+netLogoVersion := "6.0.0-M8"

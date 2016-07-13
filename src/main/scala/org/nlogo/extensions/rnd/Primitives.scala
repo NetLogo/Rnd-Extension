@@ -5,28 +5,30 @@ package org.nlogo.extensions.rnd
 import scala.collection.immutable.SortedSet
 
 import org.nlogo.agent
+import org.nlogo.core.I18N
+import org.nlogo.core.LogoList
+import org.nlogo.core.Nobody
+import org.nlogo.core.Syntax._
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.DefaultReporter
-import org.nlogo.api.Dump
 import org.nlogo.api.ExtensionException
-import org.nlogo.api.I18N
-import org.nlogo.api.LogoList
+import org.nlogo.api.Reporter
+import org.nlogo.api.Dump
 import org.nlogo.api.LogoListBuilder
-import org.nlogo.api.Syntax._
 import org.nlogo.nvm
-import org.nlogo.util.MersenneTwisterFast
+import org.nlogo.api.MersenneTwisterFast
 
-trait WeightedRndPrim extends DefaultReporter {
+trait WeightedRndPrim extends Reporter {
   val name: String
 
   def candidateVector(arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef]
 
   def candidateSyntaxType: Int
   def reporterSyntaxType: Int
-  def inputSyntax: Array[Int]
+  def inputSyntax: List[Int]
   def outputSyntax: Int
-  override def getSyntax = reporterSyntax(inputSyntax, outputSyntax)
+
+  override def getSyntax = reporterSyntax(right = inputSyntax, ret = outputSyntax)
 
   def getCandidates(minSize: Int, arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val candidates = candidateVector(arg, rng)
@@ -53,12 +55,18 @@ trait WeightedRndPrim extends DefaultReporter {
 }
 
 trait AgentSetPrim {
+  self: Reporter =>
 
-  self: DefaultReporter =>
-  override def getAgentClassString = "OT:-TPL"
+  def getAgentClassString = "OT--"
+  def getBlockAgentClassString = Some("-TPL")
+
+  def inputSyntax: List[Int]
+  def outputSyntax: Int
 
   def candidateSyntaxType: Int = AgentsetType
   def reporterSyntaxType: Int = NumberBlockType
+
+  override def getSyntax = reporterSyntax(right = inputSyntax, ret = outputSyntax, agentClassString = getAgentClassString, blockAgentClassString = getBlockAgentClassString)
 
   def candidateVector(arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val it = arg.getAgentSet.asInstanceOf[agent.AgentSet].shufflerator(rng)
@@ -96,11 +104,11 @@ trait ListPrim {
 }
 
 trait WeightedOneOf extends WeightedRndPrim {
-  def inputSyntax = Array(candidateSyntaxType, reporterSyntaxType)
+  def inputSyntax = List(candidateSyntaxType, reporterSyntaxType)
   def report(args: Array[Argument], context: Context): AnyRef =
     args(0).get match {
       case agentSet: agent.AgentSet if agentSet.count == 0 ⇒
-        org.nlogo.api.Nobody$.MODULE$
+        Nobody
       case _ ⇒
         val rng = context.getRNG
         val candidates: Vector[AnyRef] = getCandidates(1, args(0), rng)
@@ -122,7 +130,7 @@ object WeightedOneOfList extends WeightedOneOf with ListPrim {
 
 trait WeightedNOf extends WeightedRndPrim {
 
-  def inputSyntax = Array(NumberType, candidateSyntaxType, reporterSyntaxType)
+  def inputSyntax = List(NumberType, candidateSyntaxType, reporterSyntaxType)
 
   val pickIndices: (Int, Vector[AnyRef], AnyRef => Double, MersenneTwisterFast) => Iterable[Int]
   def minSize(n: Int): Int
@@ -156,7 +164,7 @@ trait AgentSetBuilder {
     val originalAgentSet = candidatesArg.get.asInstanceOf[agent.AgentSet]
     val b = Array.newBuilder[agent.Agent]
     for (i ← indices) b += candidates(i).asInstanceOf[agent.Agent]
-    new agent.ArrayAgentSet(originalAgentSet.`type`, b.result, originalAgentSet.world)
+    new agent.ArrayAgentSet(originalAgentSet.kind, b.result)
   }
 }
 
