@@ -8,4 +8,4 @@ cache:
   - $HOME/.sbt/0.13/staging
 language: scala
 scala:
-   - 2.9.3
+   - 2.11.8
