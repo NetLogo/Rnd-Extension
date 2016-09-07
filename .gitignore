@@ -12,3 +12,6 @@ classes/
 .cache
 .settings
 .texlipse
+bin/
+/.cache-main
+/.cache-tests

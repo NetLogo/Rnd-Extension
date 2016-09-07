@@ -6,6 +6,7 @@ cache:
   - $HOME/.sbt/boot
   - $HOME/.sbt/launchers
   - $HOME/.sbt/0.13/staging
+jdk: oraclejdk8
 language: scala
 scala:
    - 2.11.8
