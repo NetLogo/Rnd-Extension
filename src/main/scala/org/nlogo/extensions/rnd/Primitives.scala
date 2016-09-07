@@ -2,21 +2,25 @@
 
 package org.nlogo.extensions.rnd
 
-import scala.collection.immutable.SortedSet
-
 import org.nlogo.agent
-import org.nlogo.core.I18N
-import org.nlogo.core.LogoList
-import org.nlogo.core.Nobody
-import org.nlogo.core.Syntax._
 import org.nlogo.api.Argument
 import org.nlogo.api.Context
-import org.nlogo.api.ExtensionException
-import org.nlogo.api.Reporter
 import org.nlogo.api.Dump
+import org.nlogo.api.ExtensionException
 import org.nlogo.api.LogoListBuilder
-import org.nlogo.nvm
 import org.nlogo.api.MersenneTwisterFast
+import org.nlogo.api.Reporter
+import org.nlogo.core.I18N
+import org.nlogo.core.Nobody
+import org.nlogo.core.Syntax.AgentType
+import org.nlogo.core.Syntax.AgentsetType
+import org.nlogo.core.Syntax.ReporterType
+import org.nlogo.core.Syntax.ListType
+import org.nlogo.core.Syntax.NumberBlockType
+import org.nlogo.core.Syntax.NumberType
+import org.nlogo.core.Syntax.WildcardType
+import org.nlogo.core.Syntax.reporterSyntax
+import org.nlogo.nvm
 
 trait WeightedRndPrim extends Reporter {
   val name: String
@@ -77,10 +81,10 @@ trait AgentSetPrim {
 
   def reporterFunction(arg: Argument, context: Context): AnyRef => AnyRef = {
     val nvmContext = context.asInstanceOf[nvm.ExtensionContext].nvmContext
-    val reporter = arg.asInstanceOf[nvm.Argument].getReporter
+    val reporter = arg.getReporter
     (obj: AnyRef) => {
-      val a = obj.asInstanceOf[agent.Agent]
-      new nvm.Context(nvmContext, a).evaluateReporter(a, reporter)
+      val context = new nvm.Context(nvmContext, obj.asInstanceOf[agent.Agent])
+      reporter.report(context, Array.empty)
     }
   }
 
@@ -89,16 +93,16 @@ trait AgentSetPrim {
 trait ListPrim {
 
   def candidateSyntaxType: Int = ListType
-  def reporterSyntaxType: Int = ReporterTaskType
+  def reporterSyntaxType: Int = ReporterType
 
   def candidateVector(arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] =
     arg.getList.toVector
 
   def reporterFunction(arg: Argument, context: Context): AnyRef => AnyRef = {
-    val task = arg.getReporterTask.asInstanceOf[nvm.ReporterTask]
-    if (task.formals.size > 1) throw new ExtensionException(
-      "Task expected only 1 input but got " + task.formals.size + ".")
-    (obj: AnyRef) ⇒ task.report(context, Array(obj))
+    val lambda = arg.getReporter.asInstanceOf[nvm.AnonymousReporter]
+    if (lambda.formals.size > 1) throw new ExtensionException(
+      "Task expected only 1 input but got " + lambda.formals.size + ".")
+    (obj: AnyRef) ⇒ lambda.report(context, Array(obj))
   }
 
 }

@@ -15,4 +15,4 @@ netLogoZipSources := false
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
-netLogoVersion := "6.0.0-M8"
+netLogoVersion := "6.0.0-BETA1"
