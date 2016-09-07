@@ -14,10 +14,10 @@ import org.nlogo.core.I18N
 import org.nlogo.core.Nobody
 import org.nlogo.core.Syntax.AgentType
 import org.nlogo.core.Syntax.AgentsetType
-import org.nlogo.core.Syntax.ReporterType
 import org.nlogo.core.Syntax.ListType
 import org.nlogo.core.Syntax.NumberBlockType
 import org.nlogo.core.Syntax.NumberType
+import org.nlogo.core.Syntax.ReporterType
 import org.nlogo.core.Syntax.WildcardType
 import org.nlogo.core.Syntax.reporterSyntax
 import org.nlogo.nvm
