@@ -166,9 +166,11 @@ trait AgentSetBuilder {
   val outputSyntax = AgentsetType
   def outputBuilder(candidatesArg: Argument, candidates: Vector[AnyRef], indices: Iterable[Int]) = {
     val originalAgentSet = candidatesArg.get.asInstanceOf[agent.AgentSet]
-    val b = Array.newBuilder[agent.Agent]
-    for (i ← indices) b += candidates(i).asInstanceOf[agent.Agent]
-    new agent.ArrayAgentSet(originalAgentSet.kind, b.result)
+    val agentSetBuilder = new agent.AgentSetBuilder(originalAgentSet.kind, candidates.length)
+    for (i ← indices) {
+      agentSetBuilder.add(candidates(i).asInstanceOf[agent.Agent])
+    }
+    agentSetBuilder.build
   }
 }
 

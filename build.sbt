@@ -1,4 +1,4 @@
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.0"
 
 enablePlugins(org.nlogo.build.NetLogoExtension)
 
@@ -20,7 +20,7 @@ netLogoVersion := "6.0.0-BETA1"
 libraryDependencies ++= Seq(
   "org.ow2.asm" % "asm-all" % "5.0.4" % "test",
   "org.picocontainer" % "picocontainer" % "2.13.6" % "test",
-  "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+  "org.scalatest" %% "scalatest" % "3.0.0" % "test"
 )
 
 val testDirectory = settingKey[File]("directory that extension is copied to for testing")
