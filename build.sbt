@@ -1,6 +1,6 @@
 scalaVersion := "2.12.0"
 
-enablePlugins(org.nlogo.build.NetLogoExtension)
+enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "UTF8")
 
