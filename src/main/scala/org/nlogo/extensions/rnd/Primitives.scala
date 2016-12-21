@@ -81,7 +81,7 @@ trait AgentSetPrim {
 
   def reporterFunction(arg: Argument, context: Context): AnyRef => AnyRef = {
     val nvmContext = context.asInstanceOf[nvm.ExtensionContext].nvmContext
-    val reporter = arg.asInstanceOf[nvm.Argument].getReference
+    val reporter = arg.asInstanceOf[nvm.Argument].unevaluatedArgument
     (obj: AnyRef) => {
       val a = obj.asInstanceOf[agent.Agent]
       new nvm.Context(nvmContext, a).evaluateReporter(a, reporter)
