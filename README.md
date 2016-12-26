@@ -32,9 +32,9 @@ The extension uses Keith Schwarz's implementation of Vose's Alias Method (see Sc
 
 For example, in the following code:
 
-    let candidates n-values 500 [ ? ]
-    rnd:weighted-n-of-list-with-repeats 100 candidates [ ? ]
-    n-values 100 [ rnd:weighted-one-of-list candidates [ ? ] ]
+    let candidates n-values 500 [ [n] -> n ]
+    rnd:weighted-n-of-list-with-repeats 100 candidates [ [w] -> w ]
+    n-values 100 [ rnd:weighted-one-of-list candidates [ [w] -> w ] ]
 
 ...the line using `rnd:weighted-n-of-list-with-repeats` will likely run 100 times faster than the line using a combination of `n-values` and `rnd:weighted-one-of-list`. This is because `rnd:weighted-n-of-list-with-repeats` only initializes the algorithm once and `rnd:weighted-one-of` does it each time it is called.
 
@@ -151,8 +151,8 @@ A common way to use the primitive is to have a list of lists, where the first it
 let pairs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
 repeat 25 [
   ; report the first item of the pair selected using
-  ; the second item (i.e., `last ?`) as the weight
-  type first rnd:weighted-one-of-list pairs [ last ? ]
+  ; the second item (i.e., `last p`) as the weight
+  type first rnd:weighted-one-of-list pairs [ [p] -> last p ]
 ]
 ```
 
@@ -190,8 +190,8 @@ The items in the resulting list appear in the same order that they appeared in t
 
 Example:
 ```
-let candidates n-values 8 [ 2 ^ (? + 1) ] ; make a list with the powers of two
-print rnd:weighted-n-of-list 4 candidates [ ? ]
+let candidates n-values 8 [ [n] -> 2 ^ (n + 1) ] ; make a list with the powers of two
+print rnd:weighted-n-of-list 4 candidates [ [w] -> w ]
 ```
 
 This should print a list of four numbers, where the bigger numbers (32, 64, 128, 256) have a much better chance to show up than the smaller ones (2, 4, 8, 16).
@@ -221,7 +221,7 @@ The items in the resulting list appear in the same order that they appeared in t
 Example:
 ```
 let pairs [ [ "A" 0.2 ] [ "B" 0.8 ] ]
-print map first rnd:weighted-n-of-list-with-repeats 25 pairs [ last ? ]
+print map first rnd:weighted-n-of-list-with-repeats 25 pairs [ [p] -> last p ]
 ```
 
 This should print a list of 25 `A`s and `B`s, with roughly four times as many `B`s than `A`s.

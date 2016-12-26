@@ -27,9 +27,9 @@ The extension uses Keith Schwarz's implementation of Vose's Alias Method (see Sc
 
 For example, in the following code:
 
-    let candidates n-values 500 [ ? ]
-    rnd:weighted-n-of-list-with-repeats 100 candidates [ ? ]
-    n-values 100 [ rnd:weighted-one-of-list candidates [ ? ] ]
+    let candidates n-values 500 [ [n] -> n ]
+    rnd:weighted-n-of-list-with-repeats 100 candidates [ [w] -> w ]
+    n-values 100 [ rnd:weighted-one-of-list candidates [ [w] -> w ] ]
 
 ...the line using `rnd:weighted-n-of-list-with-repeats` will likely run 100 times faster than the line using a combination of `n-values` and `rnd:weighted-one-of-list`. This is because `rnd:weighted-n-of-list-with-repeats` only initializes the algorithm once and `rnd:weighted-one-of` does it each time it is called.
 
