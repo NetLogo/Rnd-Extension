@@ -61,7 +61,6 @@ trait WeightedRndPrim extends Reporter {
 trait AgentSetPrim {
   self: Reporter =>
 
-  def getAgentClassString = "OT--"
   def getBlockAgentClassString = Some("-TPL")
 
   def inputSyntax: List[Int]
@@ -70,7 +69,7 @@ trait AgentSetPrim {
   def candidateSyntaxType: Int = AgentsetType
   def reporterSyntaxType: Int = NumberBlockType
 
-  override def getSyntax = reporterSyntax(right = inputSyntax, ret = outputSyntax, agentClassString = getAgentClassString, blockAgentClassString = getBlockAgentClassString)
+  override def getSyntax = reporterSyntax(right = inputSyntax, ret = outputSyntax, blockAgentClassString = getBlockAgentClassString)
 
   def candidateVector(arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val it = arg.getAgentSet.asInstanceOf[agent.AgentSet].shufflerator(rng)
