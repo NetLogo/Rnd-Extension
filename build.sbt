@@ -15,7 +15,7 @@ netLogoZipSources := false
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
-netLogoVersion := "6.0.1-M1"
+netLogoVersion := "6.0.2-M1"
 
 libraryDependencies ++= Seq(
   "org.ow2.asm" % "asm-all" % "5.0.4" % "test",
