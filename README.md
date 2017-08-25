@@ -12,7 +12,7 @@ Which primitive to use depends on whether you want to select an item from a list
 | | From an AgentSet | From a List |
 |---|---|---|
 | One item | [`rnd:weighted-one-of`](#rndweighted-one-of) | [`rnd:weighted-one-of-list`](#rndweighted-one-of-list) |
-| Many items, without repeats | [`rnd:weighted-n-of`](#rndweighted-n-of-size) | [`rnd:weighted-n-of-list`](#rndweighted-n-of-list-size) |
+| Many items, without repeats | [`rnd:weighted-n-of`](#rndweighted-n-of) | [`rnd:weighted-n-of-list`](#rndweighted-n-of-list) |
 | Many items, with repeats | [`rnd:weighted-n-of-with-repeats`](#rndweighted-n-of-with-repeats) | [`rnd:weighted-n-of-list-with-repeats`](#rndweighted-n-of-list-with-repeats) |
 
 (**Note:** the initial version of the extension had a single set of primitives for both lists and agentsets, but it turned out to be confusing, so we changed it. If you were using the old version of the extension, you will need to modify your code to use the new primitives.)
