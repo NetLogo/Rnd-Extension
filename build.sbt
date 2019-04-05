@@ -6,7 +6,7 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings"
 
 name := "rnd"
 
-version := "3.0.0"
+version := "3.0.1"
 
 netLogoExtName := "rnd"
 
@@ -17,7 +17,7 @@ netLogoZipSources := false
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
-netLogoVersion := "6.0.4-9328ba6"
+netLogoVersion := "6.1.0-RC1"
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1" % "test",
