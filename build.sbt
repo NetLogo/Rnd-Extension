@@ -1,4 +1,4 @@
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.12"
 
 enablePlugins(org.nlogo.build.NetLogoExtension, org.nlogo.build.ExtensionDocumentationPlugin)
 
@@ -17,7 +17,7 @@ netLogoZipSources := false
 netLogoTarget :=
     org.nlogo.build.NetLogoExtension.directoryTarget(baseDirectory.value)
 
-netLogoVersion := "6.1.0-RC1"
+netLogoVersion := "6.1.1-c82c397"
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1" % "test",
