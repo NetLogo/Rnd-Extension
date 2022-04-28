@@ -1,11 +1,12 @@
-*~
-*.orig
+.bundledFiles
 target/
 extensions/
+/*.jar
+/*.zip
+
+*~
+*.orig
 classes/
-*.jar
-*.gz
-*.zip
 
 # eclipse files
 .project
@@ -16,4 +17,3 @@ classes/
 bin/
 /.cache-main
 /.cache-tests
-.bundledFiles
