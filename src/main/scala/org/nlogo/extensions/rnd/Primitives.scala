@@ -37,7 +37,7 @@ trait WeightedRndPrim extends Reporter {
   def getCandidates(minSize: Int, arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val candidates = candidateVector(arg, rng)
     def pluralize(count: Int, word: String) =
-      s"$count $word ${if (count != 1) "s" else ""}"
+      s"$count $word${if (count != 1) "s" else ""}"
     if (candidates.size < minSize) throw new ExtensionException(
       "Requested " + pluralize(minSize, "random item") +
         " from " + pluralize(candidates.size, "candidate") + ".")
