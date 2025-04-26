@@ -37,7 +37,7 @@ trait WeightedRndPrim extends Reporter {
   def getCandidates(minSize: Int, arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val candidates = candidateVector(arg, rng)
     def pluralize(count: Int, word: String) =
-      count + " " + word + (if (count != 1) "s" else "")
+      s"$count $word ${if (count != 1) "s" else ""}"
     if (candidates.size < minSize) throw new ExtensionException(
       "Requested " + pluralize(minSize, "random item") +
         " from " + pluralize(candidates.size, "candidate") + ".")
@@ -46,8 +46,8 @@ trait WeightedRndPrim extends Reporter {
 
   def reporterFunction(arg: Argument, context: Context): AnyRef => AnyRef
 
-  def getWeightFunction(arg: Argument, context: Context): AnyRef ⇒ Double =
-    (obj: AnyRef) ⇒ reporterFunction(arg, context)(obj) match {
+  def getWeightFunction(arg: Argument, context: Context): AnyRef => Double =
+    (obj: AnyRef) => reporterFunction(arg, context)(obj) match {
       case n: Number if n.doubleValue < 0.0 =>
         throw new ExtensionException("Got " + n + " as a weight but all weights must be >= 0.0.")
       case n: Number =>
@@ -74,8 +74,8 @@ trait AgentSetPrim {
   def candidateVector(arg: Argument, rng: MersenneTwisterFast): Vector[AnyRef] = {
     val it = arg.getAgentSet.asInstanceOf[agent.AgentSet].shufflerator(rng)
     val b = Vector.newBuilder[AnyRef]
-    while (it.hasNext) b += it.next
-    b.result
+    while (it.hasNext) b += it.next()
+    b.result()
   }
 
   def reporterFunction(arg: Argument, context: Context): AnyRef => AnyRef = {
@@ -101,7 +101,7 @@ trait ListPrim {
     val lambda = arg.getReporter.asInstanceOf[nvm.AnonymousReporter]
     if (lambda.formals.size > 1) throw new ExtensionException(
       "Task expected only 1 input but got " + lambda.formals.size + ".")
-    (obj: AnyRef) ⇒ lambda.report(context, Array(obj))
+    (obj: AnyRef) => lambda.report(context, Array(obj))
   }
 
 }
@@ -110,9 +110,9 @@ trait WeightedOneOf extends WeightedRndPrim {
   def inputSyntax = List(candidateSyntaxType, reporterSyntaxType)
   def report(args: Array[Argument], context: Context): AnyRef =
     args(0).get match {
-      case agentSet: agent.AgentSet if agentSet.count == 0 ⇒
+      case agentSet: agent.AgentSet if agentSet.count == 0 =>
         Nobody
-      case _ ⇒
+      case _ =>
         val rng = context.getRNG
         val candidates: Vector[AnyRef] = getCandidates(1, args(0), rng)
         val weightFunction = getWeightFunction(args(1), context)
@@ -156,7 +156,7 @@ trait ListBuilder {
   val outputSyntax = ListType
   def outputBuilder(candidatesArg: Argument, candidates: Vector[AnyRef], indices: Iterable[Int]) = {
     val b = new LogoListBuilder
-    for (i ← indices) b.add(candidates(i))
+    for (i <- indices) b.add(candidates(i))
     b.toLogoList
   }
 }
@@ -166,10 +166,10 @@ trait AgentSetBuilder {
   def outputBuilder(candidatesArg: Argument, candidates: Vector[AnyRef], indices: Iterable[Int]) = {
     val originalAgentSet = candidatesArg.get.asInstanceOf[agent.AgentSet]
     val agentSetBuilder = new agent.AgentSetBuilder(originalAgentSet.kind, candidates.length)
-    for (i ← indices) {
+    for (i <- indices) {
       agentSetBuilder.add(candidates(i).asInstanceOf[agent.Agent])
     }
-    agentSetBuilder.build
+    agentSetBuilder.build()
   }
 }
 

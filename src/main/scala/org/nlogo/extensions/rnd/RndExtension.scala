@@ -6,9 +6,9 @@ import org.nlogo.api.DefaultClassManager
 import org.nlogo.api.PrimitiveManager
 
 class RndExtension extends DefaultClassManager {
-  override def load(primManager: PrimitiveManager) {
+  override def load(primManager: PrimitiveManager): Unit = {
     for {
-      prim ← Seq(
+      prim <- Seq(
         WeightedOneOfAgentSet,
         WeightedOneOfList,
         WeightedNOfAgentSetWithRepeats,

@@ -6,7 +6,7 @@ name := "rnd"
 version := "3.0.1"
 isSnapshot := true
 
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.16"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings", "-encoding", "UTF8", "-release", "11")
 
 netLogoExtName := "rnd"
