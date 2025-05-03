@@ -11,4 +11,4 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Xfatal-warnings"
 
 netLogoExtName := "rnd"
 netLogoClassManager := "org.nlogo.extensions.rnd.RndExtension"
-netLogoVersion := "6.3.0"
+netLogoVersion := "7.0.0-internal1"
