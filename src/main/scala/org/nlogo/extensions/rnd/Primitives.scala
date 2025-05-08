@@ -174,12 +174,12 @@ trait AgentSetBuilder {
 }
 
 trait WithRepeats extends WeightedNOf with ListBuilder {
-  val pickIndices = Picker.pickIndicesWithRepeats _
+  val pickIndices = Picker.pickIndicesWithRepeats
   def minSize(n: Int) = math.min(n, 1)
 }
 
 trait WithoutRepeats extends WeightedNOf {
-  val pickIndices = Picker.pickIndicesWithoutRepeats _
+  val pickIndices = Picker.pickIndicesWithoutRepeats
   def minSize(n: Int) = n
 }
 
