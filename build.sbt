@@ -9,6 +9,6 @@ isSnapshot := true
 scalaVersion := "3.7.0"
 scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xfatal-warnings", "-encoding", "UTF8", "-release", "11")
 
-netLogoExtName := "rnd"
+netLogoExtName      := "rnd"
 netLogoClassManager := "org.nlogo.extensions.rnd.RndExtension"
-netLogoVersion      := "7.0.0-beta1-c8d671e"
+netLogoVersion      := "7.0.0-beta2-8cd3e65"
