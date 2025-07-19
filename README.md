@@ -233,7 +233,7 @@ This should print a list of 25 `A`s and `B`s, with roughly four times as many `B
 
 ## Building
 
-If you want to build the extension from the source, it should be sufficient to run `./sbt package` from the extension's source directory. If the build succeeds, `rnd.jar` will be created.
+If you want to build the extension from the source, it should be sufficient to run `sbt package` from the extension's source directory. If the build succeeds, `rnd.jar` will be created.
 ## Credits
 
 Authored by Nicolas Payette.
