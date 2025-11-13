@@ -45,7 +45,7 @@ public final class AliasMethod {
      * <p>
      * Given as input a list of probabilities corresponding to outcomes 0, 1,
      * ..., n - 1, along with the random number generator that should be used
-     * as the underlying generator, this constructor creates the probability 
+     * as the underlying generator, this constructor creates the probability
      * and alias tables needed to efficiently sample from this distribution.
      *
      * @param probabilities The list of probabilities.
@@ -108,7 +108,7 @@ public final class AliasMethod {
             /* Decrease the probability of the larger one by the appropriate
              * amount.
              */
-            probabilities.set(more, 
+            probabilities.set(more,
                               (probabilities.get(more) + probabilities.get(less)) - average);
 
             /* If the new probability is less than the average, add it into the
