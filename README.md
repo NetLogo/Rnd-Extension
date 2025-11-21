@@ -141,7 +141,7 @@ If all weights are `0.0`, each candidate has an equal probability of being picke
 
 Reports a random item from <tt><i>list</i></tt>.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is an error for the list to be empty.
 
@@ -180,7 +180,7 @@ Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with no repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i> of candidates</tt>.
 
@@ -208,7 +208,7 @@ This should print a list of four numbers, where the bigger numbers (32, 64, 128,
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is **not** an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i></tt> of candidates, but there has to be at least one candidate.
 
