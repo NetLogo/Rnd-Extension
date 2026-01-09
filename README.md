@@ -63,7 +63,7 @@ Reports a random agent from <tt><i>agentset</i></tt>.
 
 The probability of each agent being picked is proportional to the weight given by the <tt><i>reporter</i></tt> for that agent. The weights must not be negative.
 
-If the agentset is empty, it reports [`nobody`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#nobody).
+If the agentset is empty, it reports [`nobody`](https://docs.netlogo.org/dictionary.html#nobody).
 
 Here is a full rewrite of the **Lottery Example** model using the `rnd:weighted-one-of` primitive:
 
@@ -141,7 +141,7 @@ If all weights are `0.0`, each candidate has an equal probability of being picke
 
 Reports a random item from <tt><i>list</i></tt>.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is an error for the list to be empty.
 
@@ -158,7 +158,7 @@ repeat 25 [
 
 This should print `B` roughly four times more often than it prints `A`.
 
-If you happen to have your items and your weights in two separate lists, you can combine them into pairs by using a combination of [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) and [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list):
+If you happen to have your items and your weights in two separate lists, you can combine them into pairs by using a combination of [`map`](https://docs.netlogo.org/dictionary.html#map) and [`list`](https://docs.netlogo.org/dictionary.html#list):
 
 ```
 let items [ "A" "B" "C" ]
@@ -166,7 +166,7 @@ let weights [ 0.1 0.2 0.7 ]
 let pairs (map list items weights)
 ```
 
-Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise anonymous procedure syntax (see the [programming guide](http://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures)) to pass [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list) as the reporter for [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
+Since we apply [`map`](https://docs.netlogo.org/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise anonymous procedure syntax (see the [programming guide](https://docs.netlogo.org/programming.html#anonymous-procedures)) to pass [`list`](https://docs.netlogo.org/dictionary.html#list) as the reporter for [`map`](https://docs.netlogo.org/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
 
 
 
@@ -180,13 +180,13 @@ Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with no repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i> of candidates</tt>.
 
 If, at some point during the selection, there remains only candidates with a weight of `0.0`, they all have an equal probability of getting picked.
 
-The items in the resulting list appear in the same order that they appeared in the list of candidates. (If you want them in random order, use [`shuffle`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#shuffle) on the result).
+The items in the resulting list appear in the same order that they appeared in the list of candidates. (If you want them in random order, use [`shuffle`](https://docs.netlogo.org/dictionary.html#shuffle) on the result).
 
 Example:
 ```
@@ -208,7 +208,7 @@ This should print a list of four numbers, where the bigger numbers (32, 64, 128,
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
 
 It is **not** an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i></tt> of candidates, but there has to be at least one candidate.
 
@@ -216,7 +216,7 @@ If, at some point during the selection, there remains only candidates with a wei
 
 If all weights are `0.0`, each candidate has an equal probability of being picked.
 
-The items in the resulting list appear in the same order that they appeared in the list of candidates. (If you want them in random order, use [`shuffle`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#shuffle) on the result).
+The items in the resulting list appear in the same order that they appeared in the list of candidates. (If you want them in random order, use [`shuffle`](http://docs.netlogo.org/dictionary.html#shuffle) on the result).
 
 Example:
 ```
