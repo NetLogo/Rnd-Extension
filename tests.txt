@@ -24,6 +24,8 @@ same-list-returned-if-n-equals-size
 
 different-list-returned-if-n-equals-size-with-repeats
   # chance of this failing should be ~2.6E-9
+  # Well, it failed in https://github.com/NetLogo/NetLogo/actions/runs/22593726437/job/65459521475
+  # so I'd wager that the odds of failure are higher than that. --Jason B. (3/2/26)
   extensions [ rnd ]
   globals [ glob1 ]
   O> set glob1 ["a" "s" "d" "f" "g" "h" "j" "k" "l"]
