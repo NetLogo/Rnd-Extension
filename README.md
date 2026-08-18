@@ -136,12 +136,12 @@ If all weights are `0.0`, each candidate has an equal probability of being picke
 
 #### `rnd:weighted-one-of-list`
 
-> <tt>rnd:weighted-one-of-list <i>list</i> <i>anonymous-reporter</i></tt>
+> <tt>rnd:weighted-one-of-list <i>list</i> <i>arrow-reporter</i></tt>
 
 
 Reports a random item from <tt><i>list</i></tt>.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>arrow-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://docs.netlogo.org/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
 It is an error for the list to be empty.
 
@@ -166,7 +166,7 @@ let weights [ 0.1 0.2 0.7 ]
 let pairs (map list items weights)
 ```
 
-Since we apply [`map`](https://docs.netlogo.org/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise anonymous procedure syntax (see the [programming guide](https://docs.netlogo.org/programming.html#anonymous-procedures)) to pass [`list`](https://docs.netlogo.org/dictionary.html#list) as the reporter for [`map`](https://docs.netlogo.org/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
+Since we apply [`map`](https://docs.netlogo.org/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise arrow procedure syntax (see the [programming guide](https://docs.netlogo.org/programming.html#arrow-procedures)) to pass [`list`](https://docs.netlogo.org/dictionary.html#list) as the reporter for [`map`](https://docs.netlogo.org/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
 
 
 
@@ -175,12 +175,12 @@ Since we apply [`map`](https://docs.netlogo.org/dictionary.html#map) to both the
 
 #### `rnd:weighted-n-of-list`
 
-> <tt>rnd:weighted-n-of-list <i>size</i> <i>list</i> <i>anonymous-reporter</i></tt>
+> <tt>rnd:weighted-n-of-list <i>size</i> <i>list</i> <i>arrow-reporter</i></tt>
 
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with no repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>arrow-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://docs.netlogo.org/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
 It is an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i> of candidates</tt>.
 
@@ -203,12 +203,12 @@ This should print a list of four numbers, where the bigger numbers (32, 64, 128,
 
 #### `rnd:weighted-n-of-list-with-repeats`
 
-> <tt>rnd:weighted-n-of-list-with-repeats <i>size</i> <i>list</i> <i>anonymous-reporter</i></tt>
+> <tt>rnd:weighted-n-of-list-with-repeats <i>size</i> <i>list</i> <i>arrow-reporter</i></tt>
 
 
 Reports a list of the given <tt><i>size</i></tt> randomly chosen from the <tt><i>list</i></tt> of candidates, with repeats.
 
-The probability of each item being picked is proportional to the weight given by the <tt><i>anonymous-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://docs.netlogo.org/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+The probability of each item being picked is proportional to the weight given by the <tt><i>arrow-reporter</i></tt> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://docs.netlogo.org/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
 It is **not** an error for <tt><i>size</i></tt> to be greater than the size of the <tt><i>list</i></tt> of candidates, but there has to be at least one candidate.
 
