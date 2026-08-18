@@ -122,13 +122,13 @@ primitives:
   type: reporter
 - arguments:
   - type: list
-  - name: anonymous-reporter
+  - name: arrow-reporter
     type: reporter
   description: |2
 
     Reports a random item from <div><i>list</i></div>.
 
-    The probability of each item being picked is proportional to the weight given by the <div><i>anonymous-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+    The probability of each item being picked is proportional to the weight given by the <div><i>arrow-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
     It is an error for the list to be empty.
 
@@ -153,7 +153,7 @@ primitives:
     let pairs (map list items weights)
     ```
 
-    Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise anonymous procedure syntax (see the [programming guide](http://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures)) to pass [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list) as the reporter for [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
+    Since we apply [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map) to both the `items` list and the `weights` list, the parentheses are needed in `(map list items weights)`. We also use the concise arrow procedure syntax (see the [programming guide](http://ccl.northwestern.edu/netlogo/docs/programming.html#arrow-procedures)) to pass [`list`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#list) as the reporter for [`map`](http://ccl.northwestern.edu/netlogo/docs/dictionary.html#map). The same thing could have been written `(map [ [a b] -> list a b ] items weights)`.
   name: weighted-one-of-list
   returns: anything
   tags:
@@ -163,13 +163,13 @@ primitives:
   - name: size
     type: number
   - type: list
-  - name: anonymous-reporter
+  - name: arrow-reporter
     type: reporter
   description: |2
 
     Reports a list of the given <div><i>size</i></div> randomly chosen from the <div><i>list</i></div> of candidates, with no repeats.
 
-    The probability of each item being picked is proportional to the weight given by the <div><i>anonymous-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+    The probability of each item being picked is proportional to the weight given by the <div><i>arrow-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
     It is an error for <div><i>size</i></div> to be greater than the size of the <div><i>list</i> of candidates</div>.
 
@@ -193,13 +193,13 @@ primitives:
   - name: size
     type: number
   - type: list
-  - name: anonymous-reporter
+  - name: arrow-reporter
     type: reporter
   description: |2
 
     Reports a list of the given <div><i>size</i></div> randomly chosen from the <div><i>list</i></div> of candidates, with repeats.
 
-    The probability of each item being picked is proportional to the weight given by the <div><i>anonymous-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the anonymous procedure refers to the list item. (See the [Anonymous Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#anonymous-procedures) of the Programming Guide for more details.)
+    The probability of each item being picked is proportional to the weight given by the <div><i>arrow-reporter</i></div> for that item. The weights must not be negative. The first argument passed to the arrow procedure refers to the list item. (See the [Arrow Procedures section](https://ccl.northwestern.edu/netlogo/docs/programming.html#arrow-procedures) of the Programming Guide for more details.)
 
     It is **not** an error for <div><i>size</i></div> to be greater than the size of the <div><i>list</i></div> of candidates, but there has to be at least one candidate.
 
